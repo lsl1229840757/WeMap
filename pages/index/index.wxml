@@ -1,5 +1,11 @@
 <!--index.wxml-->
 <view class="container">
+<view class="body-view">
+<label for='magnifierSwitch'>
+  魔镜
+</label>
+  <switch id="magnifierSwitch"  bindchange="magnifierChange" value="魔镜" />
+</view>
    <map
   id="map"
   longitude="114.262947"
@@ -12,5 +18,18 @@
   show-location
   style="width: 100%; height: 300px;"
   wx:if="{{hasMarkers}}"
-></map>
+>
+<map
+  id="map2"
+  bindcontroltap="controltap"
+  include-points="{{sub_markers}}"
+  markers="{{sub_markers}}"
+  bindmarkertap="markertap2"
+  show-location
+  style="width: 50%; height: 50%;"
+  polygons='{{sub_polygons}}'
+  wx:if="{{sub_count!=0 && magnifier==true}}"
+>
+</map>
+</map>
 </view>
