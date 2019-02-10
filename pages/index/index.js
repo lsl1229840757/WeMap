@@ -8,10 +8,89 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    markers:[],
-    hasMarkers:false //添加这个变量是为了防止map只再初始化渲染一次的bug
+    markers: [],
+    sub_count: 0,
+    magnifier: false,
+    hasMarkers: false, //添加这个变量是为了防止map只再初始化渲染一次的bug
+    circles: [{
+      latitude: 30.600861,
+      longitude: 114.262947,
+      radius: 3000
+    }]
   },
-  createMarkers: function (iterable) {
+  magnifierTap: function(e) {
+    if (!this.data.magnifier) {
+      return;
+    }
+    for (var item of this.data.markers) {
+      if (item.id == e.markerId) {
+        console.log(item)
+        this.isInCircle({
+          latitude: item.latitude,
+          longitude: item.longitude,
+          radius: 3000
+        }, this.data.markers)
+      }
+    }
+    console.log(e)
+  },
+
+  rad: function(d) {
+    return d * Math.PI / 180.0;
+  },
+  GetDistance: function(lat1, lng1, lat2, lng2) {
+    var EARTH_RADIUS = 6378.137; //地球半径
+    var radLat1 = this.rad(lat1);
+    var radLat2 = this.rad(lat2);
+    var a = radLat1 - radLat2;
+    var b = this.rad(lng1) - this.rad(lng2);
+    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+      Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+    s = s * EARTH_RADIUS;
+    return s;
+  },
+  isInCircle: function(cirlce, datas) {
+    var sub_markers = []
+    var count = 0;
+    for (var data of datas) {
+      var distance = this.GetDistance(data.latitude, data.longitude, cirlce.latitude, cirlce.longitude)
+      if (distance <= 3) {
+        if (distance == 0) {
+          this.setData({
+            sub_circles: [{
+              latitude: data.latitude,
+              longitude: data.longitude,
+              radius: 3000
+            }]
+          })
+        }
+        sub_markers.push(data)
+      }
+    }
+    this.setData({
+      sub_markers: sub_markers,
+      sub_count: sub_markers.length
+    })
+    console.log("count:" + count)
+    console.log(this.data.sub_circle)
+  },
+  magnifierChange: function(e) {
+    if (e.detail.value) {
+      //开启放大镜功能
+      this.setData({
+        magnifier: true
+      });
+    } else {
+      this.setData({
+        magnifier: false,
+        sub_circles: [],
+        sub_count: 0,
+        sub_markers: []
+      });
+    }
+
+  },
+  createMarkers: function(iterable) {
     var markers = []
     for (var i = 0; i < iterable.length; i++) {
       var marker = {
@@ -19,8 +98,8 @@ Page({
         id: i,
         latitude: iterable[i].lat,
         longitude: iterable[i].lng,
-        width: 5,
-        height: 5
+        width: 8,
+        height: 8
       }
       markers.push(marker)
     };
@@ -61,15 +140,11 @@ Page({
     }
     //这里读取完用户信息之后完成醉酒json文件的载入
     const jsonJs = require("./json.js")
-    var dataArray = jsonJs.data.alcohol_data
+    var markers = this.createMarkers(jsonJs.data.alcohol_data)
     this.setData({
-      alcohol_data: dataArray
+      markers: markers,
+      hasMarkers: true
     })
-    var markers = this.createMarkers(this.data.alcohol_data)
-    this.setData({
-       markers:markers,
-       hasMarkers:true
-      })
   },
 
   getUserInfo: function(e) {
