@@ -1,6 +1,7 @@
 <!--index.wxml-->
 <view class="container">
 <view class="body-view">
+
 <label for='magnifierSwitch'>
   魔镜
 </label>
@@ -14,8 +15,8 @@
   bindcontroltap="controltap"
   markers="{{markers}}"
   circles='{{circles}}'
-  bindmarkertap="markertap"
   bindmarkertap="magnifierTap"
+  bindtap='clearMarker'
   show-location
   style="width: 100%; height: 300px;"
   wx:if="{{hasMarkers}}"
@@ -23,18 +24,22 @@
 
    <map
   id="map2"
-  bindcontroltap="controltap"
   include-points="{{sub_markers}}"
   markers="{{sub_markers}}"
-  bindmarkertap="markertap"
   show-location
   style="width: 50%; height: 50%;"
   circles='{{sub_circles}}'
   wx:if="{{sub_count!=0 && magnifier==true}}"
 >
 </map>
-
 </map>
-
-
+<!--这里不是自带的table，是自己写的css-->
+ <view class="table">
+        <view class="tr" wx:for="{{['中心点坐标','3km内发生次数','密度(次/km²)']}}">
+            <view class="th">{{item}}</view>
+             <view class='td' wx:if="{{index==0}}">{{sub_count==0?'':sub_circles_lat+','+sub_circles_lng}}</view>
+            <view class='td' wx:if="{{index==1}}">{{sub_count==0?'':sub_count}}</view>
+            <view class='td' wx:if="{{index==2}}">{{sub_count==0?'':density}}</view>
+        </view>
+    </view>
 </view>

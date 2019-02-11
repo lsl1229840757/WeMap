@@ -24,7 +24,6 @@ Page({
     }
     for (var item of this.data.markers) {
       if (item.id == e.markerId) {
-        console.log(item)
         this.isInCircle({
           latitude: item.latitude,
           longitude: item.longitude,
@@ -32,7 +31,6 @@ Page({
         }, this.data.markers)
       }
     }
-    console.log(e)
   },
 
   rad: function(d) {
@@ -61,18 +59,20 @@ Page({
               latitude: data.latitude,
               longitude: data.longitude,
               radius: 3000
-            }]
+            }],
+            sub_circles_lat: data.latitude,
+            sub_circles_lng: data.longitude
           })
         }
         sub_markers.push(data)
-      }
+      }      
     }
+    var density = sub_markers.length / (Math.PI * 3 * 3)
     this.setData({
       sub_markers: sub_markers,
-      sub_count: sub_markers.length
+      sub_count: sub_markers.length,
+      density:density.toFixed(2),
     })
-    console.log("count:" + count)
-    console.log(this.data.sub_circle)
   },
   magnifierChange: function(e) {
     if (e.detail.value) {
@@ -88,7 +88,13 @@ Page({
         sub_markers: []
       });
     }
-
+  },
+  clearMarker:function(e){
+      this.setData({
+        sub_circles: [],
+        sub_count: 0,
+        sub_markers: []
+      })
   },
   createMarkers: function(iterable) {
     var markers = []
@@ -148,7 +154,6 @@ Page({
   },
 
   getUserInfo: function(e) {
-    console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
