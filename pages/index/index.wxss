@@ -44,3 +44,9 @@ background-color: #dadada
 .td{
   font-size: 12px;
 }
+.table_show{
+  display: block;
+}
+.table_hide{
+  display: none;
+}

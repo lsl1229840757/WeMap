@@ -1,7 +1,5 @@
-<!--index.wxml-->
 <scroll-view scroll-y="true" scroll-x = "true" class="container">
 <view class="body-view">
-
 <label for='magnifierSwitch'>
   魔镜
 </label>
@@ -32,13 +30,6 @@
 >
 </map>
 </map>
-<!--这里不是自带的table，是自己写的css-->
- <view class="table" >
-        <view class="tr" wx:for="{{['中心点坐标','3km内发生次数','密度(次/km²)']}}">
-            <view class="th">{{item}}</view>
-             <view class='td' wx:if="{{index==0}}">{{sub_count==0?'':sub_circles_lat+','+sub_circles_lng}}</view>
-            <view class='td' wx:if="{{index==1}}">{{sub_count==0?'':sub_count}}</view>
-            <view class='td' wx:if="{{index==2}}">{{sub_count==0?'':density}}</view>
-        </view>
-    </view>
+  <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+
 </scroll-view>

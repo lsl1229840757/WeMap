@@ -1,12 +1,32 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/line/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "black"
-  }
+  },
+"tabBar": {
+  "color": "#a9b7b7",
+  "selectedColor": "#11cd6e",
+  "borderStyle": "black",
+  "list": [
+    {
+      "selectedIconPath": "/pages/images/a.png",
+      "iconPath": "/pages/images/a.png",
+      "pagePath": "pages/index/index",
+      "text": "数据表模式"
+    },
+    {
+      "selectedIconPath": "/pages/images/b.png",
+      "iconPath": "/pages/images/b.png",
+      "pagePath": "pages/line/index",
+      "text": "数据可视化模式"
+    }
+  ]
+}
 }
