@@ -1,11 +1,11 @@
-<scroll-view scroll-y="true" scroll-x = "true" class="container">
+<scroll-view style='height:100%' scroll-y="true" scroll-x = "true" class="container">
 <view class="body-view">
 <label for='magnifierSwitch'>
   魔镜
 </label>
   <switch id="magnifierSwitch"  bindchange="magnifierChange" value="魔镜" />
-</view>
-   <map
+
+     <map
   id="map"
   longitude="114.262947"
   latitude="30.600861"
@@ -30,6 +30,8 @@
 >
 </map>
 </map>
-  <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
-
+</view>
+<view id="mychart">
+   <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+</view>
 </scroll-view>

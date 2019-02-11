@@ -3,6 +3,7 @@ import * as echarts from '../../ec-canvas/echarts';
 const app = getApp();
 var coordinateData = [];
 var chart = null;
+
 function initChart(canvas, width, height) {
   chart = echarts.init(canvas, null, {
     width: width,
@@ -31,7 +32,7 @@ Page({
       onInit: initChart
     }
   },
-  magnifierTap: function (e) {
+  magnifierTap: function(e) {
     if (!this.data.magnifier) {
       return;
     }
@@ -42,14 +43,15 @@ Page({
           longitude: item.longitude,
           radius: 3000
         }, this.data.markers)
+
       }
     }
   },
 
-  rad: function (d) {
+  rad: function(d) {
     return d * Math.PI / 180.0;
   },
-  GetDistance: function (lat1, lng1, lat2, lng2) {
+  GetDistance: function(lat1, lng1, lat2, lng2) {
     var EARTH_RADIUS = 6378.137; //地球半径
     var radLat1 = this.rad(lat1);
     var radLat2 = this.rad(lat2);
@@ -60,7 +62,7 @@ Page({
     s = s * EARTH_RADIUS;
     return s;
   },
-  isInCircle: function (cirlce, datas) {
+  isInCircle: function(cirlce, datas) {
     var sub_markers = []
     var count = 0;
     for (var data of datas) {
@@ -80,8 +82,8 @@ Page({
         sub_markers.push(data)
       }
     }
-    
-    for(var data2 of sub_markers){
+
+    for (var data2 of sub_markers) {
       var coordinate = [];
       coordinate.push(parseFloat(data2.longitude));
       coordinate.push(parseFloat(data2.latitude));
@@ -89,50 +91,51 @@ Page({
     }
     var density = sub_markers.length / (Math.PI * 3 * 3);
     console.log(coordinateData);
-    chart.setOption({
-      title: {
-        left: 'center'
-      },
-      color: ["#37A2DA"],
-      legend: {
-        data: ['密度、数量'],
-        top: 50,
-        left: 'center',
-        z: 100
-      },
-      grid: {
-        containLabel: true
-      },
-      tooltip: {
-        show: true,
-        trigger: 'axis'
-      },
-      xAxis: {
-        type: 'category',
-        data: ['密度', '数量']
-      },
-      yAxis: {
-        x: 'center',
-        type: 'value',
-        // show: false
-      },
-      series: [{
-        name: '密度、数量',
-        type: 'bar',
-        smooth: true,
-        data: [density,sub_markers.length]
-      }
-      ]
-    })
-    
-    
+    // 解决条件渲染的bug
     this.setData({
       sub_markers: sub_markers,
       sub_count: sub_markers.length,
       density: density.toFixed(2),
     })
+    if (chart != null) {
+      chart.setOption({
+        title: {
+          left: 'center'
+        },
+        color: ["#37A2DA"],
+        legend: {
+          data: ['密度、数量'],
+          top: 60,
+          left: 'center',
+          z: 100
+        },
+        grid: {
+          containLabel: true
+        },
+        tooltip: {
+          show: true,
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['密度', '数量']
+        },
+        yAxis: {
+          x: 'center',
+          type: 'value',
+          // show: false
+        },
+        series: [{
+          name: '密度、数量',
+          type: 'bar',
+          smooth: true,
+          data: [density, sub_markers.length]
+        }]
+      })
+    }
+  
   },
-  magnifierChange: function (e) {
+  magnifierChange: function(e) {
     if (e.detail.value) {
       //开启放大镜功能
       this.setData({
@@ -147,14 +150,14 @@ Page({
       });
     }
   },
-  clearMarker: function (e) {
+  clearMarker: function(e) {
     this.setData({
       sub_circles: [],
       sub_count: 0,
       sub_markers: []
     })
   },
-  createMarkers: function (iterable) {
+  createMarkers: function(iterable) {
     var markers = []
     for (var i = 0; i < iterable.length; i++) {
       var marker = {
@@ -170,12 +173,12 @@ Page({
     return markers;
   },
   //事件处理函数
-  bindViewTap: function () {
+  bindViewTap: function() {
     wx.navigateTo({
       url: '../logs/logs'
     })
   },
-  onLoad: function () {
+  onLoad: function() {
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -211,7 +214,7 @@ Page({
     })
   },
 
-  getUserInfo: function (e) {
+  getUserInfo: function(e) {
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
